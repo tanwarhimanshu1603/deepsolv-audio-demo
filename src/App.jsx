@@ -1,61 +1,53 @@
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 import ChatRoom from './components/ChatRoom'
 import Navbar from './components/Navbar'
 
 function App() {
 
-  const [audioUrl, setAudioUrl] = useState(null);
+  const [messages,setMessages] = useState([]);
+
 
   const url = 'http://34.29.93.36:5000/infer';
 
-  const handleTextsubmission = async (text) => {
+  const getAudio = async (text) => {
     try {
       const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: text }),
       });
+      const data = await response.json();
+      const result = data.output_audio_url;
 
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
+      // Store the audio URL in the data property of the message object
+      const newMessage = {
+        id: uuidv4(),
+        sender: 'Bot',
+        data: result
+      };
 
-      const blob = await response.blob();
-      const audioUrl = URL.createObjectURL(blob);
-      console.log(audioUrl);
-      setAudioUrl(audioUrl);
+      setMessages(prevMessages => [...prevMessages, newMessage]); // Update messages state
     } catch (error) {
-      console.error('Error fetching audio:', error);
+      console.error('Error fetching audio response:', error);
     }
+  }
+
+  const handleTextsubmission = (text) => {
+    // Store the user's text message in the data property of the message object
+    const newUserMessage = {
+      id: uuidv4(),
+      sender: 'Human',
+      data: text
+    };
+
+    setMessages(prevMessages => [...prevMessages, newUserMessage]); // Update messages state
+    getAudio(text); // Fetch audio for the user's text message
   };
 
-  const messages = [
-    {
-        id: 1,
-        sender: 'Human',
-        data: 'This is a text'
-    },
-    {
-        id: 2,
-        sender: 'Bot',
-        data: 'a wav file'
-    },
-    {
-        id: 3,
-        sender: 'Human',
-        data: 'This is a text'
-    },
-    {
-      id: 4,
-      sender: 'Bot',
-      data: 'This is a demo text'
-    },
-    {
-      id: 5,
-      sender: 'Bot',
-      data: 'This is a demo text two'
-    }
-]
+  
 
   return (
     <div>

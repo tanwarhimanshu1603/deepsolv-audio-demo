@@ -11,10 +11,14 @@ const Message = ({sender,data}) => {
             <img src={photo} alt='avatar' />
           </div>
         </div>
-        <div className="chat-header">
-          {sender}
-        </div>
-        <div className="chat-bubble bg-gray-800 text-gray-100">{data}</div>
+        {
+            sender === 'Human' ? <div className="chat-bubble bg-gray-800 text-gray-100">{data}</div>
+            :
+            <audio controls>
+                <source src={data} type="audio/wav"/>
+                Your browser does not support the audio element.
+            </audio>
+        }
       </div>
     </div>
   )

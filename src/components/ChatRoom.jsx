@@ -4,7 +4,7 @@ import SendMessage from './SendMessage'
 
 const ChatRoom = ({messages,onformSubmission}) => {
   return (
-    <div className=' bg-gray-200'>
+    <div className=' '>
         <ChatBox messages={messages} />
         <SendMessage handleSubmission={onformSubmission} />
     </div>
