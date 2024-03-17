@@ -1,14 +1,14 @@
 import React from 'react'
-// import logo from '../assets/logo.png'
-import photo from '../assets/photo.jpg'
+import harshit from '../assets/harshit.jpg'
+import one from '../assets/one.png'
 
 const Message = ({sender,data}) => {
   return (
-    <div className=''>
+    <div>
       <div className={`chat ${sender === 'Human' ? "chat-end" : "chat-start"}`}>
         <div className="chat-image avatar">
           <div className="w-10 rounded-full">
-            <img src={photo} alt='avatar' />
+            <img src={sender === 'Human' ? harshit : one} alt='avatar' />
           </div>
         </div>
         {

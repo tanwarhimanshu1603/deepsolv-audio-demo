@@ -7,11 +7,14 @@ function App() {
 
   const [messages,setMessages] = useState([]);
 
+  const [loader,setLoader] = useState(false);
+
 
   const url = 'http://34.29.93.36:5000/infer';
 
   const getAudio = async (text) => {
     try {
+      setLoader(true);
       const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -33,6 +36,7 @@ function App() {
     } catch (error) {
       console.error('Error fetching audio response:', error);
     }
+    setLoader(false);
   }
 
   const handleTextsubmission = (text) => {
@@ -52,7 +56,7 @@ function App() {
   return (
     <div>
       <Navbar />
-      <ChatRoom messages={messages} onformSubmission={handleTextsubmission}/>
+      <ChatRoom messages={messages} onformSubmission={handleTextsubmission} loader={loader}/>
     </div>
   )
 }
